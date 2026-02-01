@@ -19,17 +19,8 @@
     <div class="row">
       <div class="col">
         <?php include "./common/header.php";    ?>
-
-
-        <h3>Students List</h3>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end my-2">
-
-          <a class="btn btn-dark mx-1 btn-sm" href="add-new-student.php">Add new Student</a>
-          <a class="btn btn-dark btn-sm" href="archive-students-list.php">Archive list</a>
-
-
-        </div>
-
+        <h3>Archive Students List</h3>
+        <a class="btn btn-dark" href="add-new-student.php" style="float: right;">Add new Student</a>
         <table class="table table-bordered">
           <thead>
             <tr>
@@ -48,7 +39,7 @@
 
             include "./common/db.php";
 
-            $query = "SELECT * FROM `students` where status!='archive'";
+            $query = "SELECT * FROM `students` where status='archive'";
             $result = mysqli_query($connection, $query);
 
 
@@ -60,7 +51,8 @@
       <td>' . $row['gender'] . '</td>
       <td>' . $row['date_of_birth'] . '</td>
       <td>' . $row['address'] . '</td>
-      <td><a href="./process/delete-student.php?id=' . $row["student_id"] . '" class="mx-1 btn btn-danger btn-sm">Delete</a><a href="./process/archive-student.php?id=' . $row["student_id"] . '" class="btn btn-dark btn-sm">Archive</a></td>
+      <td><a href="./process/delete-student.php?id=' . $row["student_id"] . '" class="btn btn-danger btn-sm">Delete</a><a href="./process/unarchive-student.php?id=' . $row["student_id"] . '" class="mx-1 btn btn-dark btn-sm">Unarchive</a></td>
+    </td>
     </tr>';
             }
 

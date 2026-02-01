@@ -3,17 +3,17 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=<table class=" table>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>teacher</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-
-
-
-
-
 
 </head>
 
 <body>
+
+
+
+
 
   <div class="container my-5">
     <div class="row">
@@ -21,25 +21,23 @@
         <?php include "./common/header.php";    ?>
 
 
-        <h3>Students List</h3>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end my-2">
 
-          <a class="btn btn-dark mx-1 btn-sm" href="add-new-student.php">Add new Student</a>
-          <a class="btn btn-dark btn-sm" href="archive-students-list.php">Archive list</a>
-
+        <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+          <h3>Teachers List</h3>
+          <a class="btn btn-dark" href="add-new-teacher.php">Add new teacher</a>
 
         </div>
 
-        <table class="table table-bordered">
+
+        <table class="table">
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">name</th>
-              <th scope="col">father_name</th>
+              <th scope="col">firstname</th>
+              <th scope="col">lastname</th>
               <th scope="col">gender</th>
               <th scope="col">dob</th>
               <th scope="col">address</th>
-              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -48,21 +46,31 @@
 
             include "./common/db.php";
 
-            $query = "SELECT * FROM `students` where status!='archive'";
+            $query = "SELECT * FROM `teachers`";
             $result = mysqli_query($connection, $query);
 
 
-            while ($row = mysqli_fetch_assoc($result)) {
-              echo  '<tr>
-      <th scope="row">' . $row["student_id"] . '</th>
+            $rows = mysqli_num_rows($result);
+
+            if ($rows == 0) {
+              # code...
+              echo '<tr><td colspan="6" class="text-center">No record found</td></tr>';
+            } else {
+              while ($row = mysqli_fetch_assoc($result)) {
+                echo  '<tr>
+      <th scope="row">' . $row["teacher_id"] . '</th>
       <td>' . $row["name"] . '</td>
       <td>' . $row['father_name'] . '</td>
       <td>' . $row['gender'] . '</td>
       <td>' . $row['date_of_birth'] . '</td>
       <td>' . $row['address'] . '</td>
-      <td><a href="./process/delete-student.php?id=' . $row["student_id"] . '" class="mx-1 btn btn-danger btn-sm">Delete</a><a href="./process/archive-student.php?id=' . $row["student_id"] . '" class="btn btn-dark btn-sm">Archive</a></td>
     </tr>';
+              }
             }
+
+
+
+
 
             ?>
 
@@ -73,6 +81,7 @@
     </div>
 
   </div>
+
 
 
 </body>
