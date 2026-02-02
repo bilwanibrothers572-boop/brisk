@@ -3,36 +3,25 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>teacher</title>
+  <meta name="viewport" content="width=<table class=" table>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+
+
+
+
 
 </head>
 
 <body>
 
-
-
-
-
   <div class="container my-5">
     <div class="row">
       <div class="col">
         <?php include "./common/header.php";    ?>
-        <h3>Teachers List</h3>
-
-
-
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-
-
-          <a class="btn btn-dark btn-sm" href="add-new-teacher.php">Add new teacher</a>
-          <a class="btn btn-dark btn-sm" href="archive-teachers-list.php">Archive list</a>
-
-        </div>
-
-
-        <table class="table">
+        <h3>Archive Teachers List</h3>
+        <a class="btn btn-dark" href="add-new-teacher.php" style="float: right;">Add new Teacher</a>
+        <table class="table table-bordered">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -41,8 +30,7 @@
               <th scope="col">gender</th>
               <th scope="col">dob</th>
               <th scope="col">address</th>
-              <th scope="col">Qualification</th>
-              <th scope="col">contact no</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -51,33 +39,22 @@
 
             include "./common/db.php";
 
-            $query = "SELECT * FROM `teachers`";
+            $query = "SELECT * FROM `teachers` where status='archive'";
             $result = mysqli_query($connection, $query);
 
 
-            $rows = mysqli_num_rows($result);
-
-            if ($rows == 0) {
-              # code...
-              echo '<tr><td colspan="6" class="text-center">No record found</td></tr>';
-            } else {
-              while ($row = mysqli_fetch_assoc($result)) {
-                echo  '<tr>
-      <th scope="row">' . $row["teacher_id"] . '</th>
+            while ($row = mysqli_fetch_assoc($result)) {
+              echo  '<tr>
+      <th scope="row">' . $row["student_id"] . '</th>
       <td>' . $row["name"] . '</td>
       <td>' . $row['father_name'] . '</td>
       <td>' . $row['gender'] . '</td>
       <td>' . $row['date_of_birth'] . '</td>
       <td>' . $row['address'] . '</td>
-      <td>' . $row['qualification'] . '</td>
-      <td>' . $row['contact no'] . '</td>
+      <td><a href="./process/delete-teacher.php?id=' . $row["teacher_id"] . '" class="btn btn-danger btn-sm">Delete</a><a href="./process/unarchive-teacher.php?id=' . $row["teacher_id"] . '" class="mx-1 btn btn-dark btn-sm">Unarchive</a></td>
+    </td>
     </tr>';
-              }
             }
-
-
-
-
 
             ?>
 
@@ -88,7 +65,6 @@
     </div>
 
   </div>
-
 
 
 </body>

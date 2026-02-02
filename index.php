@@ -18,12 +18,14 @@
   <div class="container my-5">
     <div class="row">
       <div class="col">
-        <?php include "./common/header.php";    ?>
+        <?php include "./common/header.php";
+        include "./dashboard.php";
+        ?>
 
 
 
         <div class="d-grid gap-2 d-md-flex justify-content-md-between">
-          <h3>Welcome</h3>
+          
 
 
         </div>
