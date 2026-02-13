@@ -1,3 +1,15 @@
+<?php
+session_start();
+if (!isset($_SESSION["user"])) {
+  header("location:login.php");
+  exit();
+}
+?>
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,22 +46,64 @@
                 $gender     = $_POST["gender"];
                 $zip        = $_POST["zip"];
                 $dob        = $_POST["dob"];
+                $qualification = $_POST["qualification"];
+                $contact  = $_POST["contact"];
 
-                include "./common/db.php";
 
-                $query = "
+                $errors = [];
+
+                if ($name == "") {
+                    $errors[] = "Name is required";
+                }
+
+                if ($fatherName == "") {
+                    $errors[] = "Second name is required";
+                }
+
+                if ($gender == "") {
+                    $errors[] = "Gender is required";
+                }
+
+                if ($city == "") {
+                    $errors[] = "City is required";
+                }
+
+                if ($qualification == "") {
+                    $errors[] = "Qualification is required";
+                }
+
+                if ($contact != "" && !preg_match("/^[0-9]{10,15}$/", $contact)) {
+                    $errors[] = "Contact number must be 10–15 digits";
+                }
+
+                if ($zip != "" && !is_numeric($zip)) {
+                    $errors[] = "Zip must be numeric";
+                }
+
+                /* 3️⃣ SHOW ERRORS (STOP INSERT) */
+                if (!empty($errors)) {
+                    echo '<div class="alert alert-danger">';
+                    foreach ($errors as $error) {
+                        echo "<div>$error</div>";
+                    }
+                    echo '</div>';
+                } else {
+                    include "./common/db.php";
+
+                    $query = "
         INSERT INTO teachers
-        (name, father_name, gender, address, zip, city, date_of_birth)
+        (name, father_name, gender, address, zip, city, date_of_birth,qualification,contact)
         VALUES
-        ('$name', '$fatherName', '$gender', '$address', '$zip', '$city', '$dob')
+        ('$name', '$fatherName', '$gender', '$address', '$zip', '$city', '$dob','$qualification','$contact')
     ";
 
-                $result = mysqli_query($connection, $query);
+                    $result = mysqli_query($connection, $query);
 
-                if ($result) {
-                    echo '<div class="alert alert-success">Data is saved</div>';
-                } else {
-                    echo mysqli_error($connection);
+                    if ($result) {
+                        echo '<div class="alert alert-success">Data is saved</div>';
+                    } else {
+                        echo mysqli_error($connection);
+                    }
                 }
             }
 
@@ -76,12 +130,12 @@
 
             <div class="col-md-4">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" name="name">
+                <input type="text" class="form-control" id="name" name="name" value="<?php echo   isset($name)?$name:"";   ?>">
             </div>
             <div class="col-md-4">
                 <label for="fatherName" class="form-label">Second Name</label>
 
-                <input type="text" class="form-control" id="fatherName" name="fatherName">
+                <input type="text" class="form-control" id="fatherName" name="fatherName" value="<?php echo isset($fatherName)?$fatherName:"";?>">
             </div>
             <div class="col-md-4">
                 <label for="DOB" class="from-label">DOB</label>
@@ -96,8 +150,38 @@
             </div>
             <div class="col-md-6">
                 <label for="inputCity" class="form-label">City</label>
-                <input type="text" class="form-control" id="inputCity" name="city">
+                <select id="city" class="form-select" name="city">
+                    <option value="">Choose...</option>
+
+                    <option value="MUltan">bwp</option>
+                    <option value="DGK">multan</option>
+                </select>
+
+
             </div>
+
+            <div class="col-md-2">
+                <label for="inputZip" class="form-label">Zip</label>
+                <input type="text" class="form-control" id="inputZip" name="zip">
+            </div>
+
+            <div class="col-md-4">
+                <label for="qualification" class="form-label">qualification</label>
+                <select id="qualification" class="form-select" name="qualification" required>
+                    <option value="">Choose...</option>
+                    <option value="intermediate" <?php echo (isset($qualification) && $qualification == 'intermediate') ? 'selected' : ''; ?>>intermediate</option>
+                    <option value="graduate" <?php echo (isset($qualification) && $qualification == 'graduate') ? 'selected' : ''; ?>>graduate</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="inputcontact" class="form-label">contact</label>
+                <input type="text" class="form-control" id="contact" name="contact">
+
+            </div>
+
+
+
             <div class="col-md-4">
                 <label for="gender" class="form-label">Gender</label>
                 <select id="gender" class="form-select" name="gender">
@@ -106,14 +190,11 @@
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                 </select>
-            </div>
-            <div class="col-md-2">
-                <label for="inputZip" class="form-label">Zip</label>
-                <input type="text" class="form-control" id="inputZip" name="zip">
-            </div>
-            <div class="col-12">
 
             </div>
+
+
+
             <div class="col-12">
                 <button type="submit" class="btn btn-dark" name="btnSave">Save</button>
             </div>

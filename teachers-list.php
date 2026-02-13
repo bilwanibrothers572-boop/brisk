@@ -1,12 +1,19 @@
+<?php
+session_start();
+if (!isset($_SESSION["user"])) {
+  header("location:login.php");
+  exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>teacher</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-
+  <?php
+  include "./common/css.php";
+  include "./common/js.php";
+  ?>
 </head>
 
 <body>
@@ -43,6 +50,7 @@
               <th scope="col">address</th>
               <th scope="col">Qualification</th>
               <th scope="col">contact no</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -51,7 +59,9 @@
 
             include "./common/db.php";
 
-            $query = "SELECT * FROM `teachers`";
+            $query = "SELECT * FROM `teachers` WHERE status = 'active'";
+
+
             $result = mysqli_query($connection, $query);
 
 
@@ -61,17 +71,22 @@
               # code...
               echo '<tr><td colspan="6" class="text-center">No record found</td></tr>';
             } else {
+              $serialno = 1;
               while ($row = mysqli_fetch_assoc($result)) {
                 echo  '<tr>
-      <th scope="row">' . $row["teacher_id"] . '</th>
+      <th scope="row">' . $serialno . '</th>
       <td>' . $row["name"] . '</td>
       <td>' . $row['father_name'] . '</td>
       <td>' . $row['gender'] . '</td>
       <td>' . $row['date_of_birth'] . '</td>
       <td>' . $row['address'] . '</td>
       <td>' . $row['qualification'] . '</td>
-      <td>' . $row['contact no'] . '</td>
+      <td>' . $row['contact'] . '</td>
+      <td><a href="./process/delete-teacher.php?id=' . $row['teacher_id'] . '" class="btn btn-danger btn-sm"> Delete </a> </td>
+      <td><a href="./process/archive-teachers.php?id=' . $row['teacher_id'] . '" class="btn btn-dark btn-sm"> Archive </a> </td>
     </tr>';
+
+    $serialno = $serialno + 1;
               }
             }
 

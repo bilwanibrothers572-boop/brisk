@@ -1,3 +1,22 @@
+<?php
+
+ if(!isset($_SESSION)) 
+    { 
+        session_start(); 
+    }
+
+if (!isset($_SESSION["user"])) {
+  header("location:login.php");
+  exit();
+}
+?>
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html>
 
@@ -38,37 +57,37 @@
 
     <div class="dashboard"> <a href="students-list.php" style="text-decoration: none;">
             <div class="card">
-                
-                <?php 
+
+                <?php
                 include "./common/db.php";
                 $student_query = "SELECT COUNT(*) AS total_students FROM students";
                 $student_result = mysqli_query($connection, $student_query);
-$student_row = mysqli_fetch_assoc($student_result);
-$total_students = $student_row['total_students'];
-echo "<h2> $total_students Total Students</h2>";
-                
-                
-                
-                
-                
-                
-                
-                
+                $student_row = mysqli_fetch_assoc($student_result);
+                $total_students = $student_row['total_students'];
+                echo "<h2> $total_students Total Students</h2>";
+
+
+
+
+
+
+
+
                 ?>
             </div>
         </a>
 
         <a href="teachers-list.php" style="text-decoration: none;">
             <div class="card">
-                <?php 
+                <?php
                 $teacher_query = "SELECT COUNT(*) AS total_teachers FROM teachers";
-$teacher_result = mysqli_query($connection, $teacher_query);
-$teacher_row = mysqli_fetch_assoc($teacher_result);
-$total_teachers = $teacher_row['total_teachers'];
-echo "<h2> $total_teachers Total Teachers</h2>";
-                
+                $teacher_result = mysqli_query($connection, $teacher_query);
+                $teacher_row = mysqli_fetch_assoc($teacher_result);
+                $total_teachers = $teacher_row['total_teachers'];
+                echo "<h2> $total_teachers Total Teachers</h2>";
+
                 ?>
-               
+
             </div>
         </a>
     </div>

@@ -1,3 +1,21 @@
+<?php
+session_start();
+if (!isset($_SESSION["user"])) {
+  header("location:login.php");
+  exit();
+}
+?>
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,16 +61,23 @@
             $result = mysqli_query($connection, $query);
 
 
+
+            if (mysqli_num_rows($result) == 0) {
+  echo "<tr><td colspan='7'>No archived teachers found</td></tr>";
+}
+
+
+
             while ($row = mysqli_fetch_assoc($result)) {
               echo  '<tr>
-      <th scope="row">' . $row["student_id"] . '</th>
+      <th scope="row">' . $row["teacher_id"] . '</th>
       <td>' . $row["name"] . '</td>
       <td>' . $row['father_name'] . '</td>
       <td>' . $row['gender'] . '</td>
       <td>' . $row['date_of_birth'] . '</td>
       <td>' . $row['address'] . '</td>
       <td><a href="./process/delete-teacher.php?id=' . $row["teacher_id"] . '" class="btn btn-danger btn-sm">Delete</a><a href="./process/unarchive-teacher.php?id=' . $row["teacher_id"] . '" class="mx-1 btn btn-dark btn-sm">Unarchive</a></td>
-    </td>
+   
     </tr>';
             }
 

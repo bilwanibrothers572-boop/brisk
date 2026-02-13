@@ -1,6 +1,6 @@
  <?php
     include "../common/db.php";
-    $student_id = $_GET['id'];
+    $teacher_id = $_GET['id'];
     $query = "DELETE FROM teachers WHERE `teachers`.`teacher_id` = $teacher_id"; 
     $result = mysqli_query($connection, $query);
     if ($result) {
@@ -10,7 +10,7 @@
     } else {
         echo "Something went wrong" . mysqli_error($connection);
     }
-
+?>
 
 
 

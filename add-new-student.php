@@ -1,3 +1,19 @@
+<?php
+session_start();
+if (!isset($_SESSION["user"])) {
+  header("location:login.php");
+  exit();
+}
+?>
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,6 +47,7 @@
                 $zip = $_POST["zip"];
                 $is_enrolled = $_POST["isEnrolled"];
                 $dob = $_POST["dob"];
+                $class = $_POST["class"];
                 
                 // DOB Validation
                 $today = date('Y-m-d');
@@ -53,14 +70,14 @@
                 if (empty($dobError)) {
                     include "./common/db.php";
                     
-                    $query = "INSERT INTO `students`(`name`, `father_name`, `gender`, `address`,`zip`,`city`,`date_of_birth`) VALUES ('$std_name','$father_name','$gender','$address','$zip','$city','$dob');";
+                    $query = "INSERT INTO `students`(`name`, `father_name`, `gender`, `address`,`zip`,`city`,`date_of_birth`,`class`) VALUES ('$std_name','$father_name','$gender','$address','$zip','$city','$dob','$class');";
                     
                     $result = mysqli_query($connection, $query);
                     
                     if ($result) {
                         echo '<div class="alert alert-success">Data is saved</div>';
                         // Clear form after successful save
-                        $std_name = $father_name = $address = $city = $gender = $zip = $dob = "";
+                        $std_name = $father_name = $address = $city = $gender = $zip = $dob = $class = "";
                     } else {
                         echo '<div class="alert alert-danger">Something went wrong: ' . mysqli_error($connection) . '</div>';
                     }
@@ -107,6 +124,16 @@
                 <label for="inputZip" class="form-label">Zip</label>
                 <input type="text" class="form-control" id="inputZip" name="zip" value="<?php echo isset($zip) ? $zip : ''; ?>" required>
             </div>
+
+             <div class="col-md-4">
+                <label for="class" class="form-label">Class</label>
+                <select id="class" class="form-select" name="class" required>
+                    <option value="">Choose...</option>
+                    <option value="one" <?php echo (isset($class) && $class == 'one') ? 'selected' : ''; ?>>one</option>
+                    <option value="two" <?php echo (isset($class) && $class == 'two') ? 'selected' : ''; ?>>two</option>
+                </select>
+            </div>
+             
             <div class="col-12">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="gridCheck" name="isEnrolled" <?php echo (isset($is_enrolled) && $is_enrolled == 'on') ? 'checked' : ''; ?>>

@@ -1,21 +1,23 @@
+<?php
+session_start();
+if (!isset($_SESSION["user"])) {
+  header("location:login.php");
+  exit();
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=<table class=" table>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-
-
-
-
-
-
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
-
 <body>
-
-  <div class="container my-5">
+<div class="container my-5">
     <div class="row">
       <div class="col">
         <?php include "./common/header.php";    ?>
@@ -39,6 +41,7 @@
               <th scope="col">gender</th>
               <th scope="col">dob</th>
               <th scope="col">address</th>
+              <th scope="col">class</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -52,16 +55,32 @@
             $result = mysqli_query($connection, $query);
 
 
+             $rows = mysqli_num_rows($result);
+
+
+
+             if ($rows == 0) {
+              # code...
+              echo '<tr><td colspan="6" class="text-center">No record found</td></tr>';
+            } else {
+              $serialno = 1;
+
+
             while ($row = mysqli_fetch_assoc($result)) {
               echo  '<tr>
+              <th scope="row">' . $serialno . '</th>
       <th scope="row">' . $row["student_id"] . '</th>
       <td>' . $row["name"] . '</td>
       <td>' . $row['father_name'] . '</td>
       <td>' . $row['gender'] . '</td>
       <td>' . $row['date_of_birth'] . '</td>
       <td>' . $row['address'] . '</td>
+      <td>' . $row['class'] . '</td>
       <td><a href="./process/delete-student.php?id=' . $row["student_id"] . '" class="mx-1 btn btn-danger btn-sm">Delete</a><a href="./process/archive-student.php?id=' . $row["student_id"] . '" class="btn btn-dark btn-sm">Archive</a></td>
     </tr>';
+
+     $serialno = $serialno + 1;
+            }
             }
 
             ?>

@@ -10,3 +10,4 @@
     } else {
         echo "Something went wrong" . mysqli_error($connection);
     }
+?>
